@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Meteor } from "meteor/meteor";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ContactForm = () => {
   const [name, setName] = useState("");
@@ -7,15 +9,24 @@ const ContactForm = () => {
   const [imageUrl, setImageUrl] = useState("");
 
   const saveContact = () => {
-    Meteor.call("contacts.insert", { name, email, imageUrl });
-
-    setName("");
-    setEmail("");
-    setImageUrl("");
+    Meteor.call(
+      "contacts.insert",
+      { name, email, imageUrl },
+      (errorResponse) => {
+        if (errorResponse) {
+          toast.error(errorResponse.error);
+        } else {
+          setName("");
+          setEmail("");
+          setImageUrl("");
+        }
+      }
+    );
   };
 
   return (
     <form className="mt-6">
+      <ToastContainer />
       <div className="grid grid-cols-6 gap-6">
         <div className="col-span-6 sm:col-span-6 lg:col-span-2">
           <label
