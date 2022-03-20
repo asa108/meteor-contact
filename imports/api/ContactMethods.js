@@ -12,4 +12,7 @@ Meteor.methods({
       createdAt: new Date(),
     });
   },
+  "contacts.remove"({ contactId }) {
+    return ContactCollection.remove(contactId);
+  },
 });
