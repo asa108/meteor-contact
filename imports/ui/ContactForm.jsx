@@ -16,6 +16,7 @@ const ContactForm = () => {
         if (errorResponse) {
           toast.error(errorResponse.error);
         } else {
+          toast.success("Contact saved.");
           setName("");
           setEmail("");
           setImageUrl("");
