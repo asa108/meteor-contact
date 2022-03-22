@@ -21,4 +21,13 @@ Meteor.methods({
     check(contactId, String);
     return ContactCollection.remove(contactId);
   },
+  "contacts.edit"(_id, { name, email, imageUrl }) {
+    ContactCollection.update(_id, {
+      $set: {
+        name,
+        email,
+        imageUrl,
+      },
+    });
+  },
 });

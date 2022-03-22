@@ -1,8 +1,11 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { ContactCollection } from "../api/ContactCollection";
 import { useTracker, useSubscribe, useFind } from "meteor/react-meteor-data";
+import EditForm from "./EditForm";
 
 const ContactList = () => {
+  const [showEdit, setShowEdit] = useState(false);
+
   const isLoading = useSubscribe("allContacts");
 
   const contacts = useFind(() => {
@@ -19,6 +22,11 @@ const ContactList = () => {
     Meteor.call("contacts.remove", { contactId: _id });
   };
 
+  const editContact = (event, contact) => {
+    event.preventDefault();
+    console.log("contact", contact);
+  };
+
   if (isLoading()) {
     return (
       <div>
@@ -33,34 +41,46 @@ const ContactList = () => {
 
   const ContactItem = memo(({ contact }) => {
     return (
-      <li className="py-4 flex items-center justify-between space-x-3">
-        <div className="min-w-0 flex-1 flex items-center space-x-3">
-          <div className="flex-shrink-0">
-            <img
-              className="h-10 w-10 rounded-full"
-              src={contact.imageUrl}
-              alt=""
-            />
+      <div>
+        <li className="py-4 flex items-center justify-between space-x-3">
+          <div className="min-w-0 flex-1 flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <img
+                className="h-10 w-10 rounded-full"
+                src={contact.imageUrl}
+                alt=""
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {contact.name}
+              </p>
+              <p className="text-sm font-medium text-gray-500 truncate">
+                {contact.email}
+              </p>
+            </div>
+            <div>
+              <a
+                // onClick={(event) => editContact(event, contact)}
+                // onClick={setShowEdit(!showEdit)}
+                href="#"
+                className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Edit
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                onClick={(event) => removeContact(event, contact._id)}
+                className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Remove
+              </a>
+            </div>
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-gray-900 truncate">
-              {contact.name}
-            </p>
-            <p className="text-sm font-medium text-gray-500 truncate">
-              {contact.email}
-            </p>
-          </div>
-          <div>
-            <a
-              href="#"
-              onClick={(event) => removeContact(event, contact._id)}
-              className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Remove
-            </a>
-          </div>
-        </div>
-      </li>
+        </li>
+      </div>
     );
   });
 
@@ -75,7 +95,10 @@ const ContactList = () => {
           className="mt-4 border-t border-b border-gray-200 divide-y divide-gray-200"
         >
           {contacts.map((contact) => (
-            <ContactItem key={contact._id} contact={contact} />
+            <div>
+              <ContactItem key={contact._id} contact={contact} />
+              <EditForm contact={contact} />
+            </div>
           ))}
         </ul>
       </div>

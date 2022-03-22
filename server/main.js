@@ -4,5 +4,5 @@ import "/imports/api/ContactMethods";
 import "/imports/api/ContactsPublications";
 
 Meteor.startup(() => {
-  // If the Links collection is empty, add some data.
+  // If the collection is empty, add some data.
 });
