@@ -22,9 +22,9 @@ const ContactList = () => {
     Meteor.call("contacts.remove", { contactId: _id });
   };
 
-  const editContact = (event, contact) => {
-    event.preventDefault();
-    console.log("contact", contact);
+  const editContact = () => {
+    setShowEdit(!showEdit);
+    console.log("showEdit", showEdit);
   };
 
   if (isLoading()) {
@@ -61,8 +61,7 @@ const ContactList = () => {
             </div>
             <div>
               <a
-                // onClick={(event) => editContact(event, contact)}
-                // onClick={setShowEdit(!showEdit)}
+                onClick={editContact}
                 href="#"
                 className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
               >
@@ -97,7 +96,7 @@ const ContactList = () => {
           {contacts.map((contact) => (
             <div>
               <ContactItem key={contact._id} contact={contact} />
-              <EditForm contact={contact} />
+              {showEdit && <EditForm contact={contact} />}
             </div>
           ))}
         </ul>

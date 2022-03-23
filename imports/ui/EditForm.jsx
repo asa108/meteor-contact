@@ -12,7 +12,17 @@ const EditForm = ({ contact }) => {
   const updateContact = (e, _id) => {
     e.preventDefault();
 
-    Meteor.call("contacts.edit", _id, { name, email, imageUrl });
+    Meteor.call(
+      "contacts.edit",
+      _id,
+      { name, email, imageUrl },
+      (errorResponse) => {
+        if (errorResponse) return toast.error(errorResponse.error);
+        // } else {
+        //   toast.success("Contact saved.");
+        // }
+      }
+    );
   };
 
   return (
